@@ -85,7 +85,7 @@ const phoneRegex = /^(?:\+1|1)?[-.\s]?\(?(\d{3})\)?[-.\s]?(\d{3})[-.\s]?(\d{4})$
       <div className="container">
         <div className="image-container">
          
-          <p>Discover new things on superapp</p>
+          <p>Discover new things on superapp new tech</p>
         </div>
 
         <div className="form-container">
