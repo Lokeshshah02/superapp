@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "./registerpage.scss";
 import { useNavigate } from "react-router-dom";
 
-////hello
 const RegisterPage = () => {
   const navigate = useNavigate();
   
