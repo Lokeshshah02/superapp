@@ -1,0 +1,118 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+
+    .image-container{
+        width: 50%;
+        height: 100vh;
+    background-image: url("../../assests/image\ 13.png");
+    p{
+        color: white;
+        width: 32rem;
+    margin-top: 37rem;
+    font-size: 53px;
+    }
+}
+
+    
+}
+
+.form-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 50%;
+        height: 100vh;
+        background: black;
+
+    h1{
+        color: #72DB73;
+        font-family: Single Day; 
+        font-size: 39px;
+        font-weight: 200;
+        
+
+    }
+    h2{
+        color: white;
+    }
+    form{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 33px;
+        input{
+            border-radius: 3.816px;
+            background: #292929;
+            border: none;
+            height: 39px;
+            width: 404px;
+            color: white;
+
+            
+            &::placeholder{
+                padding-left: 8px;
+            }
+        }
+        
+        
+        .checkbox-container{
+            display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        width: 404px;
+        gap: 14px;
+        margin: 17px;
+        word-spacing: 1px;
+        
+        
+        #checkbox{
+            height: 15px;
+            width: 15px;
+            align-items: start;
+        }
+        span{
+            color: #7C7C7C;
+            font-size: 17px;
+            
+        }
+        
+    }
+    button{
+        width: 404px;
+        border-radius: 50px;
+        height: 38px;
+        font-size: 22px;
+        background-color: #72DB73;
+        color: white;
+        cursor: pointer;
+    }
+    p{
+        color: #7C7C7C ;
+        width: 404px;
+        font-size: 16px;
+        span{
+            color: #72DB73;
+            
+        }
+        
+    }
+    .errorAlert{
+        color: red;
+    }
+    
+}
+
+}
+
