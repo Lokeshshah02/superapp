@@ -1,0 +1,129 @@
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+.main-container {
+  height: 100vh;
+  background-color: black;
+
+
+  .sub-container {
+    height: 90vh;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 0px 150px 0px 150px;
+    .category-container {
+        
+      h2 {
+        color: #72db73;
+        font-family: "Single Day";
+        font-size: 39px;
+        font-weight: 200;
+        margin-bottom: 70px;
+      }
+      p {
+        color: white;
+        font-size: 50px;
+        width: 49%;
+      }
+
+      .button-container {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        column-gap: 0px;
+        width: 49%;
+        margin-top: 35px ;
+      }
+      
+      .button {
+        display: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        button {
+          margin: 10px;
+          text-align: center;
+          background-color: #f0f0f0;
+          border: 1px solid #ccc;
+          background: #148a08;
+          border-radius: 30px;
+          width: 109px;
+          height: 33px;
+          cursor: pointer;
+          color: white;
+          border: none;
+          //   padding-right: 5px;
+          //   gap: 3px;
+
+          span {
+            position: relative;
+            top: 2px;
+            left: 5px;
+            svg {
+              color: #085c00;
+              position: relative;
+              top: 1px;
+              left: 5px;
+              font-size: 13px;
+            }
+          }
+        }
+      }
+      .warning{
+        color: red;
+        font-size: 16px;
+      }
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-radius: 20px;
+      gap: 20px;
+      width: 50%;
+
+      .grid-item {
+        text-align: center;
+        border-radius: 10px;
+        width: 218px;
+        height: 173px;
+        padding: 14px 0px 14px 0px;
+        h2 {
+            margin-top: 10px;
+            font-size: 1.2em;
+            color: white;
+            position: relative;
+            right: 61px;
+            top: -17px;
+            font-weight: 200;
+        }
+
+        img {
+         width: 100%;
+        }
+      }
+    }
+  }
+}
+
+//footer
+
+.footer{
+    display: flex;
+    flex-direction: row-reverse;
+    
+    
+    button{
+        border-radius: 30px;
+        border: none;
+        background: #148A08;
+        color: white;
+        height: 30px;
+        width: 85px;
+        margin-right: 150px;
+    }
+}
