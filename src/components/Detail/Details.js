@@ -1,33 +1,77 @@
-
+import React, { useEffect, useState } from "react";
 import "./details.scss";
 import profile from "../assests/profile.png";
-import rainy from "../assests/rain.png";
+import humidity from "../assests/humidity.png";
 import temperature from "../assests/pressure.png";
 import wind from "../assests/wind.png";
-import humidity from "../assests/humidity.png";
 import line from "../assests/line.png";
-import React, { useEffect, useState } from "react";
+import axios from "axios";
+import StopWatch from "./StopWatch";
+import {  NavLink, useNavigate } from "react-router-dom";
 
 const Details = () => {
+  const navigate = useNavigate();
   const [cardTitle, setCardTitle] = useState([]);
-  const [name, setName] = useState([])
+  const [formData, setFormData] = useState([]);
+  const [weatherData, setWeatherData] = useState([]);
+  const [newsData, setNewsData] = useState([]);
+  const [currentNewsIndex, setCurrentNewsIndex] = useState(0);
+
+  const WEATHER_API_URL = `https://api.weatherapi.com/v1/current.json?key=${process.env.REACT_APP_WHEATHER_API}&q=Bengaluru`;
+
+  const NEWS_API_URL = `https://newsapi.org/v2/top-headlines?country=in&category=general&apiKey=${process.env.REACT_APP_NEWS_API}`;
 
   useEffect(() => {
     const storedCardTitle = localStorage.getItem("MovieDetails");
+    const storedFromData = localStorage.getItem("formdata");
+  
     if (storedCardTitle) {
       const showTitle = JSON.parse(storedCardTitle);
       setCardTitle(showTitle);
     }
-
-    const storedName = localStorage.getItem("formData");
-    if (storedName) {
-      const showName = JSON.parse(storedName);
-      setName(showName);
+    if (storedFromData) {
+      const showFormData = JSON.parse(storedFromData);
+      setFormData(showFormData);
     }
 
+// fetching api
+    axios
+    .get(NEWS_API_URL)
+    .then((res) => {
+      setNewsData(res.data.articles);
+      const randomIndex = Math.floor(
+        Math.random() * res.data.articles.length
+      );
+      setCurrentNewsIndex(randomIndex);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 
+// fetching weather api
+    axios
+      .get(WEATHER_API_URL)
+      .then((res) => {
+        console.log(res);
+        setWeatherData(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
   }, []);
+  
+
+
+
+  const getTiming = () => {
+    if (weatherData.current && weatherData.current.last_updated) {
+      const lastUpdatedTime = new Date(weatherData.current.last_updated);
+      const hours = lastUpdatedTime.getHours();
+      return hours >= 12 ? "PM" : "AM";
+    }
+    return "";
+  };
 
   return (
     <>
@@ -42,73 +86,118 @@ const Details = () => {
                   </div>
                   <div className="content-box">
                     <div className="profile-info">
-                      <p>Lokesh shah</p>
-                      <p>lokesh@gmail.com</p>
-                      <p className="username">Lokesh</p>
+                      <p>{formData.name}</p>
+                      <p>{formData.email}</p>
+                      <p className="username">{formData.username}</p>
                     </div>
                     <div className="movie-info">
-                            <button>action</button>
-                            <button>action</button>
-                            <button>action</button>
-                            <button>action</button>
-                            <button>action</button>
-                            <button>action</button>
-                            <button>action</button>
-                            <button>action</button>
+                      {cardTitle.map((item, id) => (
+                        <button key={id}>{item}</button>
+                      ))}
                     </div>
                   </div>
                 </div>
                 <div className="temp-box">
-                  <div className="upper">
-                    <p>2-02-2023</p>
-                    <p>03:33 PM</p>
-                  </div>
-                  <div className="lower">
-                    <div className="first">
-                      <div className="row">
-                      <img src={rainy} alt=""/>
-                      <p>Heavy rain</p>
+                  {weatherData && weatherData.current && (
+                    <>
+                      <div className="upper">
+                        <p>
+                          {weatherData.current.last_updated}
+                          {getTiming()}
+                        </p>
                       </div>
-                    <div className="line">
-                      <img src={line} alt="" />
-                    </div>
-                    </div>
-                    <div className="second">
-                      <div className="row">
-                      <p>24&deg;C</p>
-                      <p><img src={temperature} alt=""/><span>1010 mbar pressure</span></p>
-                      </div>
-                    <div className="line">
-                      <img src={line} alt="" />
-                    </div>
-                    </div>
-                    <div className="third">
-                      <div className="third-one">
-                      <img src={wind} alt="" />
-                      <p>3.7km/hr<br/> wind</p>
-                      </div>
-                      <div className="third-two">
-                      <img src={humidity} alt="" />
-                      <p>87% <br/>Humidity</p>
-                      </div>
+                      <div className="lower">
+                        <div className="first">
+                          <div className="row">
+                            <img
+                              src={weatherData.current.condition.icon}
+                              alt=""
+                            />
+                            <p>{weatherData.current.condition.text}</p>
+                          </div>
+                          <div className="line">
+                            <img src={line} alt="" />
+                          </div>
+                        </div>
+                        <div className="second">
+                          <div className="row">
+                            <p>{weatherData.current.temp_c}&deg;C</p>
+                            <p className="row2">
+                          
+                              <img src={temperature} alt="" />
 
-                    </div>
+
+                              <p>
+                                {weatherData.current.pressure_mb} mbar pressure
+                              </p>
+                            
+                            </p>
+                          </div>
+                          <div className="line">
+                            <img src={line} alt="" />
+                          </div>
+                        </div>
+                        <div className="third">
+                          <div className="third-one">
+                            <img src={wind} alt="" />
+                            <p>
+                              {weatherData.current.wind_kph}km/h
+                              <br /> wind
+                            </p>
+                          </div>
+                          <div className="third-two">
+                            <img src={humidity} alt="" />
+                            <p>
+                              {weatherData.current.humidity}%<br />
+                              Humidity
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+              <div className="notes-container">
+                <div className="notes">
+                  <p>All notes</p>
+                  <div className="note-text">
+                    <textarea placeholder="Write a note!!" />
                   </div>
                 </div>
               </div>
-              <div className="notes-container"></div>
             </div>
-            <div className="bottom-profile"></div>
+            <div className="bottom-profile">
+              <StopWatch/>
+            </div>
           </div>
-          <div className="right-container"></div>
+          <div className="right-container">
+            {newsData.length > 0 && (
+              <>
+                <div className="news-image">
+                  <img src={newsData[currentNewsIndex].urlToImage} alt="" />
+                  <div className="news-title">
+                    <p>{newsData[currentNewsIndex].title}</p>
+                    <p className="news-date">
+                      {newsData[currentNewsIndex].publishedAt}
+                    </p>
+                  </div>
+                </div>
+                <div className="news-content">
+                  <p>{newsData[currentNewsIndex].description}</p>
+                </div>
+              </>
+            )}
+          </div>
         </div>
         <div className="bottom-container">
+          <NavLink to={"Movies"}>
           <button>Browse</button>
+          </NavLink>
         </div>
       </section>
     </>
   );
 };
-
 
 export default Details;

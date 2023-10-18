@@ -1,123 +1,130 @@
 import React, { useEffect, useState } from "react";
 import "./category.scss";
-import { CategoryData } from "../dataset/Data";
-import { RxCross1 } from "react-icons/rx";
-import { IoWarningSharp } from "react-icons/io5";
+import { AiOutlineClose } from "react-icons/ai";
+import { AiFillWarning } from "react-icons/ai";
+import { CategoryData } from "../dataset/Data"
 import { useNavigate } from "react-router-dom";
+
 
 const Category = () => {
   const navigate = useNavigate();
+  const [showWarning, setShowWarning] = useState(false);
 
-  const [selectCategory, setSelectCategory] = useState([]);
-  const [warning, setWarning] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState([]);
 
   const handleSelection = (categoryId) => {
-    if (selectCategory.includes(categoryId)) {
-      setSelectCategory((prevSelected) =>
-        prevSelected.filter((id) => id !== categoryId)
+    if (selectedCategory.includes(categoryId)) {
+      setSelectedCategory((prevSelection) =>
+        prevSelection.filter((id) => id !== categoryId)
       );
     } else {
-      setSelectCategory((prevSelected) => [...prevSelected, categoryId]);
+      setSelectedCategory((prevSelection) => [...prevSelection, categoryId]);
     }
   };
 
-  const handleCancel = (categoryId) => {
-    setSelectCategory((prevSelected) =>
-      prevSelected.filter((id) => id !== categoryId)
+  const handleCancelCategory = (categoryId) => {
+    setSelectedCategory((prevSelection) =>
+      prevSelection.filter((id) => id !== categoryId)
     );
   };
 
   const handleNextButton = () => {
-    if (selectCategory.length >= 3) {
-      setWarning(false);
+    if (selectedCategory.length >= 3) {
+      setShowWarning(false);
+      const selectedCardTitle = selectedCategory.map((categoryId)=>{
+        const selectedCard = CategoryData.find((item)=> item.id === categoryId)
+        return selectedCard ? selectedCard.title : "";
+      })
+      localStorage.setItem("MovieDetails", JSON.stringify(selectedCardTitle));
       navigate("/details");
     } else {
-      setWarning(true);
+      setShowWarning(true);
     }
   };
 
   useEffect(() => {
-    if (selectCategory.length === 0) {
-      setWarning(false);
-    } else if (selectCategory.length < 3) {
-      setWarning(true);
+    if (selectedCategory.length === 0) {
+      setShowWarning(false);
+    } else if (selectedCategory.length < 3) {
+      setShowWarning(true);
     } else {
-      setWarning(false);
+      setShowWarning(false);
     }
-  }, [selectCategory]);
+  }, [selectedCategory]);
 
   return (
     <>
-      <div className="main-container">
-        <div className="sub-container">
-          <div className="category-container">
-            <h2>Super app</h2>
-            <p>Choose your entertainment category</p>
-
-            <div className="button-container">
-              {CategoryData.map((categoryId) => {
-                const cardData = CategoryData.find(
+      <section className="category-container">
+        <div className="row">
+          <div className="left-cat">
+            <div className="heading">
+              <h1>Super app</h1>
+              <p>
+                Choose your entertainment
+                <br /> category
+              </p>
+            </div>
+            <div className="selected-cat">
+              {selectedCategory.map((categoryId) => {
+                const selectedCard = CategoryData.find(
                   (item) => item.id === categoryId
                 );
                 return (
-                  <div className="button" >
-                      <button key={categoryId}>
-                    {cardData && (
-                        <>
-                          {cardData.title}
-                          <span>
-                            <RxCross1
-                              onClick={() => handleCancel(categoryId)}
-                              />
-                          </span>
-                              </>
-                        
-                        )}
-                      </button>
-                  </div>
+                  <button key={categoryId}>
+                    {selectedCard && (
+                      <>
+                        {selectedCard.title}
+                        <AiOutlineClose
+                          onClick={() => handleCancelCategory(categoryId)}
+                        />
+                      </>
+                    )}
+                  </button>
                 );
               })}
             </div>
-
-            {warning && (
-              <p className="warning">
-                <span>
-                  <IoWarningSharp />
-                </span>
-                Minimum 3 category required
-              </p>
+            {showWarning && (
+              <div className="warning">
+                <p>
+                  <span>
+                    <AiFillWarning />
+                  </span>
+                  Minimum 3 category required
+                </p>
+              </div>
             )}
           </div>
-
-          <div className="selection-container">
-            <div class="grid-container">
-              {CategoryData.map((items, id) => {
-                const background = {
-                  backgroundColor: items.background,
-                  border: selectCategory.includes(items.id)
+          <div className="right-cat">
+            <div className="card">
+              {CategoryData.map((item, id) => {
+                const cardStyle = {
+                  backgroundColor: item.background,
+                  border: selectedCategory.includes(item.id)
                     ? "5px solid #11B800"
                     : "none",
                 };
 
                 return (
                   <div
-                    className="grid-item"
+                    className="card-item"
                     key={id}
-                    style={background}
-                    onClick={() => handleSelection(items.id)}
+                    style={cardStyle}
+                    onClick={() => handleSelection(item.id)}
                   >
-                    <h2>{items.title}</h2>
-                    <img src={items.image} alt="" />
+                    <p>{item.title}</p>
+                    <div className="card-img">
+                      <img src={item.image} alt="" />
+                    </div>
                   </div>
                 );
               })}
             </div>
           </div>
         </div>
-        <div className="footer">
+        <div className="bottom">
           <button onClick={handleNextButton}>Next Page</button>
         </div>
-      </div>
+      </section>
     </>
   );
 };
