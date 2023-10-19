@@ -54,11 +54,12 @@ const Movies = () => {
   })
   
   const handleLogo=()=>{
-    navigate("/news")
+    navigate("/details")
   }
 
   useEffect(() => {
     const selectedGenreNames = JSON.parse(localStorage.getItem("MovieDetails"));
+    console.log(selectedGenreNames)
 
     if (selectedGenreNames) {
       const selectedGenreIds = selectedGenreNames.map((name) =>

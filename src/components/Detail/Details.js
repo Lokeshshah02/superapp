@@ -7,7 +7,7 @@ import wind from "../assests/wind.png";
 import line from "../assests/line.png";
 import axios from "axios";
 import StopWatch from "./StopWatch";
-import {  NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Details = () => {
   const navigate = useNavigate();
@@ -72,6 +72,10 @@ const Details = () => {
     }
     return "";
   };
+  const handleBrowse=()=>{
+    navigate("/Movies")
+  }
+
 
   return (
     <>
@@ -191,9 +195,7 @@ const Details = () => {
           </div>
         </div>
         <div className="bottom-container">
-          <NavLink to={"Movies"}>
-          <button>Browse</button>
-          </NavLink>
+        <button onClick={handleBrowse}>Browse</button>
         </div>
       </section>
     </>
